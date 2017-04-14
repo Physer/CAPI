@@ -9,13 +9,13 @@
     <ProductVersion>
     </ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{CFF176B3-7B66-4553-97EA-7CF28EC832ED}</ProjectGuid>
+    <ProjectGuid>{73335166-7178-48FE-A7F8-153F50FB0E71}</ProjectGuid>
     <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>CAPI.API</RootNamespace>
     <AssemblyName>CAPI.API</AssemblyName>
-    <TargetFrameworkVersion>v4.6.2</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <MvcBuildViews>false</MvcBuildViews>
     <UseIISExpress>false</UseIISExpress>
     <IISExpressSSLPort />
@@ -105,18 +105,17 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Models\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\CAPI.Business\CAPI.Business.csproj">
-      <Project>{09cf9217-49cf-4037-a01f-dc52bd5e70a6}</Project>
+      <Project>{60c2677a-57d9-4957-b9cf-7ecd6a059366}</Project>
       <Name>CAPI.Business</Name>
     </ProjectReference>
     <ProjectReference Include="..\CAPI.Services\CAPI.Services.csproj">
-      <Project>{c095b4ac-685b-455e-bb0c-cbe30da66c0b}</Project>
+      <Project>{cb500cbb-6ed9-4c2d-a2e3-47e575450f96}</Project>
       <Name>CAPI.Services</Name>
     </ProjectReference>
   </ItemGroup>
