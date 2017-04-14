@@ -7,6 +7,7 @@ namespace CAPI.API
         protected void Application_Start()
         {
             GlobalConfiguration.Configure(WebApiConfig.Register);
+            ContainerConfig.Register();
         }
     }
 }

@@ -6,13 +6,19 @@ namespace CAPI.API.Controllers
 {
     public class ContentController : ApiController
     {
+        private readonly IContentProvider<Guid> _contentProvider;
+
+        public ContentController(IContentProvider<Guid> contentProvider)
+        {
+            _contentProvider = contentProvider;
+        }
+
         [HttpGet]
         public IHttpActionResult Get()
         {
             try
             {
-                var contentService = new ContentProvider();
-                return Json(contentService.GetData());
+                return Json(_contentProvider.GetData());
             }
             catch (Exception e)
             {
@@ -25,8 +31,7 @@ namespace CAPI.API.Controllers
         {
             try
             {
-                var contentService = new ContentProvider();
-                return Json(contentService.GetData(identifier));
+                return Json(_contentProvider.GetData(identifier));
             }
             catch (Exception e)
             {
