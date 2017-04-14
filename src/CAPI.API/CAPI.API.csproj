@@ -87,7 +87,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\WebApiConfig.cs" />
-    <Compile Include="Controllers\ValuesController.cs" />
+    <Compile Include="Controllers\ContentController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -109,6 +109,16 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\CAPI.Business\CAPI.Business.csproj">
+      <Project>{09cf9217-49cf-4037-a01f-dc52bd5e70a6}</Project>
+      <Name>CAPI.Business</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\CAPI.Services\CAPI.Services.csproj">
+      <Project>{c095b4ac-685b-455e-bb0c-cbe30da66c0b}</Project>
+      <Name>CAPI.Services</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
