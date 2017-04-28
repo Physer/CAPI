@@ -1,0 +1,25 @@
+﻿@model CAPI.API.Viewmodels.CapiViewModel
+<div>
+    @if (Model.CapiObjectImplementationNames != null && Model.CapiObjectImplementationNames.Any())
+    {
+        <h2>CAPI Object Implementations:</h2>
+        <ul>
+            @foreach (var capiContent in Model.CapiObjectImplementationNames)
+            {
+                <li>@capiContent</li>
+            }
+        </ul>
+    }
+</div>
+<div>
+    @if (Model.CapiProviderImplementationNames != null && Model.CapiProviderImplementationNames.Any())
+    {
+        <h2>CAPI Provider Implementations:</h2>
+        <ul>
+            @foreach (var capiProvider in Model.CapiProviderImplementationNames)
+            {
+                <li>@capiProvider</li>
+            }
+        </ul>
+    }
+</div>

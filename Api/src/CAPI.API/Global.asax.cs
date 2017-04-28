@@ -1,4 +1,6 @@
 ﻿using System.Web.Http;
+using System.Web.Routing;
+using CAPI.API.App_Start;
 
 namespace CAPI.API
 {
@@ -8,6 +10,7 @@ namespace CAPI.API
         {
             GlobalConfiguration.Configure(WebApiConfig.Register);
             ContainerConfig.Register();
+            RouteConfig.RegisterMvcRoutes(RouteTable.Routes);
         }
     }
 }
