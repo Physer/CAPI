@@ -3,10 +3,11 @@ package com.valtech.amsterdam.valtechapipoc.service;
 import com.valtech.amsterdam.valtechapipoc.model.BaseModel;
 import com.valtech.amsterdam.valtechapipoc.service.loader.ModelLoader;
 
+import java.io.IOException;
 import java.util.List;
 
 /**
- * Created by jaspe on 15-4-2017.
+ * A Commands that loads a List of objects of type TModel
  */
 
 public class LoadListCommand<TModel extends BaseModel> implements Command<List<TModel>> {
@@ -17,7 +18,7 @@ public class LoadListCommand<TModel extends BaseModel> implements Command<List<T
     }
 
     @Override
-    public List<TModel> execute() {
+    public List<TModel> execute() throws IOException {
         return mModelLoader.getList();
     }
 }

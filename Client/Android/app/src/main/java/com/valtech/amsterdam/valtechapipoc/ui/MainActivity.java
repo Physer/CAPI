@@ -5,10 +5,12 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ListView;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import com.valtech.amsterdam.valtechapipoc.R;
 import com.valtech.amsterdam.valtechapipoc.model.Product;
@@ -16,7 +18,6 @@ import com.valtech.amsterdam.valtechapipoc.platform.StringResourcePreferenceMana
 import com.valtech.amsterdam.valtechapipoc.service.AsyncCommandExecutor;
 import com.valtech.amsterdam.valtechapipoc.service.LoadListCommand;
 import com.valtech.amsterdam.valtechapipoc.service.TaskListener;
-import com.valtech.amsterdam.valtechapipoc.service.loader.ModelLoader;
 import com.valtech.amsterdam.valtechapipoc.service.loader.implementation.network.BufferedStreamContentReader;
 import com.valtech.amsterdam.valtechapipoc.service.loader.implementation.network.GsonDesynchronizer;
 import com.valtech.amsterdam.valtechapipoc.service.loader.implementation.network.NetworkModelLoader;
@@ -25,6 +26,10 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
     private LoadListCommand<Product> mTask;
+
+    private ProgressBar mProgressBar;
+    private ListView mListView;
+    private TextView mTextViewError;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,6 +46,10 @@ public class MainActivity extends AppCompatActivity {
                         .setAction("Action", null).show();
             }
         });
+
+        mProgressBar = (ProgressBar)findViewById(R.id.progressbar_loading);
+        mListView = (ListView)findViewById(R.id.listview_main);
+        mTextViewError = (TextView)findViewById(R.id.textview_error);
     }
 
     @Override
@@ -54,12 +63,17 @@ public class MainActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
 
-        mTask = new LoadListCommand<>(new NetworkModelLoader<Product>(new BufferedStreamContentReader(), new GsonDesynchronizer<>(Product.class), new StringResourcePreferenceManager(this), Product.class));
+        mTask = new LoadListCommand<>(new NetworkModelLoader<>(new BufferedStreamContentReader(), new GsonDesynchronizer<>(Product.class), new StringResourcePreferenceManager(this), Product.class));
 
         AsyncCommandExecutor<List<Product>> productsExecutor = new AsyncCommandExecutor<>(new TaskListener<List<Product>>() {
             @Override
-            public void onComplete(List<Product> products) throws NoSuchMethodException {
+            public void onComplete(List<Product> products) {
                 onLoadComplete(products);
+            }
+
+            @Override
+            public void onError(Exception exception) {
+                onLoadError();
             }
         });
 
@@ -82,7 +96,16 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void onLoadComplete(List<Product> result) {
+        mTask = null;
+        mProgressBar.setVisibility(View.GONE);
         ProductAdapter adapter = new ProductAdapter(this, result);
-        ((ListView)findViewById(R.id.ListView)).setAdapter(adapter);
+        mListView.setAdapter(adapter);
+        mListView.setVisibility(View.VISIBLE);
+    }
+
+    private void onLoadError() {
+        mTask = null;
+        mProgressBar.setVisibility(View.GONE);
+        mTextViewError.setVisibility(View.VISIBLE);
     }
 }

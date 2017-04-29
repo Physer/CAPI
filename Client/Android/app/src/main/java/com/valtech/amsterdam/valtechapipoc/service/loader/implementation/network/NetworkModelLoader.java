@@ -8,13 +8,14 @@ import com.valtech.amsterdam.valtechapipoc.model.annotation.ApiInfo;
 import com.valtech.amsterdam.valtechapipoc.platform.PreferenceManager;
 import com.valtech.amsterdam.valtechapipoc.service.loader.ModelLoader;
 
+import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.List;
 import java.util.UUID;
 
 /**
- * Created by jasper on 11-4-2017.
+ * A Model loader which loads models from a Network connection
  */
 
 public class NetworkModelLoader<TModel extends BaseModel> implements ModelLoader<TModel, UUID> {
@@ -37,24 +38,13 @@ public class NetworkModelLoader<TModel extends BaseModel> implements ModelLoader
     }
 
     @Override
-    public List<TModel> getList() {
-        try {
-            ApiInfo annotation = mClassType.getAnnotation(ApiInfo.class);
-            URL url = new URL(mPreferenceManager.GetValue(R.string.api_base_location) + annotation.methodName());
+    public List<TModel> getList() throws IOException {
+        ApiInfo annotation = mClassType.getAnnotation(ApiInfo.class);
+        URL url = new URL(mPreferenceManager.GetValue(R.string.api_base_location) + annotation.methodName());
 
-            HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
-            try {
-                String content = mUrlContentReader.readContent(urlConnection);
-                List<TModel> result = mDesynchronizer.getList(content);
-                return result;
-            }
-            finally{
-                urlConnection.disconnect();
-            }
-        }
-        catch(Exception e) {
-            Log.e("ERROR", e.getMessage(), e);
-            return null;
-        }
+        HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
+
+        String content = mUrlContentReader.readContent(urlConnection);
+        return mDesynchronizer.getList(content);
     }
 }

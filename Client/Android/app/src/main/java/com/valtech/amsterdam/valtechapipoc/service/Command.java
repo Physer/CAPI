@@ -1,9 +1,11 @@
 package com.valtech.amsterdam.valtechapipoc.service;
 
+import java.io.IOException;
+
 /**
- * Created by jaspe on 11-4-2017.
+ * A command which returns TResult object on execute()
  */
 
 public interface Command<TResult> {
-    TResult execute();
+    TResult execute() throws IOException;
 }
