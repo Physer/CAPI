@@ -4,11 +4,12 @@ import android.os.AsyncTask;
 import android.util.Log;
 
 /**
- * Created by jaspe on 11-4-2017.
+ * A class for Asynchronously executing Command objects
  */
 
 public class AsyncCommandExecutor<TResult> extends AsyncTask<Command<TResult>, Void, TResult> {
     private TaskListener<TResult> mListener;
+    private Exception mException;
 
     public AsyncCommandExecutor(TaskListener<TResult> mListener) {
         this.mListener = mListener;
@@ -17,10 +18,10 @@ public class AsyncCommandExecutor<TResult> extends AsyncTask<Command<TResult>, V
     @Override
     protected TResult doInBackground(Command<TResult>... params) {
         try {
-            TResult result = params[0].execute();
-            return result;
+            return params[0].execute();
         }
         catch(Exception e) {
+            mException = e;
             Log.e("ERROR", e.getMessage(), e);
             return null;
         }
@@ -29,10 +30,10 @@ public class AsyncCommandExecutor<TResult> extends AsyncTask<Command<TResult>, V
     @Override
     protected void onPostExecute(TResult result) {
         super.onPostExecute(result);
-        try {
+        if (mException == null) {
             mListener.onComplete(result);
-        } catch (NoSuchMethodException e) {
-            e.printStackTrace();
+        } else {
+            mListener.onError(mException);
         }
     }
 }

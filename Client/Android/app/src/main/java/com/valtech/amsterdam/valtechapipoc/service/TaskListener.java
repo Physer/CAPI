@@ -1,9 +1,10 @@
 package com.valtech.amsterdam.valtechapipoc.service;
 
 /**
- * Created by jaspe on 8-4-2017.
+ * Describes TaskListener interface
  */
 
 public interface TaskListener<TResult> {
-    void onComplete(TResult result) throws NoSuchMethodException;
+    void onComplete(TResult result);
+    void onError(Exception exception);
 }

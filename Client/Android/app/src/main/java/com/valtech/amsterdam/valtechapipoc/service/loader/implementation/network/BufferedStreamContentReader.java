@@ -6,16 +6,19 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 
 /**
- * Created by jasper.van.zijp on 18-4-2017.
+ * Reads String content from a HttpURLConnection by Buffering reading
  */
 
 public class BufferedStreamContentReader implements UrlContentReader {
     @Override
     public String readContent(HttpURLConnection urlConnection) throws IOException {
-        BufferedReader bufferedReader = null;
+        BufferedReader bufferedReader;
 
-        bufferedReader = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
-
+        try {
+            bufferedReader = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
+        } catch (Exception e) {
+            throw new IOException(e);
+        }
 
         StringBuilder stringBuilder = new StringBuilder();
         String line;
