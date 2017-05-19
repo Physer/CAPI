@@ -18,7 +18,7 @@ import java.util.UUID;
  * A Model loader which loads models from a Network connection
  */
 
-public class NetworkModelLoader<TModel extends BaseModel> implements ModelLoader<TModel, UUID> {
+public class NetworkModelLoader<TModel extends BaseModel> implements ModelLoader<TModel> {
     private UrlContentReader mUrlContentReader;
     private Desynchronizer<TModel> mDesynchronizer;
     private PreferenceManager mPreferenceManager;
@@ -29,12 +29,6 @@ public class NetworkModelLoader<TModel extends BaseModel> implements ModelLoader
         this.mDesynchronizer = mDesynchronizer;
         this.mPreferenceManager = preferenceManager;
         mClassType = classType;
-    }
-
-
-    @Override
-    public TModel load(UUID uuid) {
-        return null;
     }
 
     @Override

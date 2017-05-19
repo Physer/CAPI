@@ -1,13 +1,10 @@
 package com.valtech.amsterdam.valtechapipoc.ui;
 
-import android.app.Activity;
 import android.content.Context;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -21,45 +18,70 @@ import java.util.List;
  * Created by jasper.van.zijp on 7-4-2017.
  */
 
-public class ProductAdapter extends ArrayAdapter<Product> {
+public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHolder> {
     private Context mContext;
+    private List<Product> mProducts;
 
-    public ProductAdapter(@NonNull Context context, @NonNull List<Product> objects) {
-        super(context, 0, objects);
+    public ProductAdapter(List<Product> products, Context context) {
+        mProducts = products;
         mContext = context;
     }
 
     @Override
-    public long getItemId(int position) {
-        return 0;
+    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        View productView = LayoutInflater.from(parent.getContext())
+                .inflate(R.layout.product, parent, false);
+        return new ProductAdapter.ViewHolder(productView);
     }
 
-    @NonNull
     @Override
-    public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
-        Product product = getItem(position);
+    public void onBindViewHolder(ViewHolder holder, int position) {
+        Product product = mProducts.get(position);
 
-        if (convertView == null) {
-            LayoutInflater inflater = ((Activity)getContext()).getLayoutInflater();
-            convertView = inflater.inflate(R.layout.product, parent, false);
-        }
+        if (product == null) return;
 
-        if (product == null) return convertView;
+        TextView titleTextView = holder.getTitleTextView();
+        titleTextView.setText(product.getTitle());
 
-        ((TextView)convertView.findViewById(R.id.textTitle)).setText(product.getTitle());
+        TextView descriptionTextView = holder.getDescriptionTextView();
+        descriptionTextView.setText(product.getDescription());
 
-        if (product.getDescription() != null) {
-            ((TextView)convertView.findViewById(R.id.textDescription)).setText(product.getDescription().toString());
-        }
-
-        if (product.getImageUrl() != null) {
-            ImageView imageView = (ImageView)convertView.findViewById(R.id.imageView);
+        ImageView imageView = holder.getImageView();
+        if (product.getImageUrl() == null) {
+            imageView.setImageResource(R.drawable.image_not_found);
+        } else {
             Picasso
-                    .with(mContext)
-                    .load(product.getImageUrl())
-                    .into(imageView);
+                .with(mContext)
+                .load(product.getImageUrl())
+                .placeholder(R.drawable.loading)
+                .error(R.drawable.image_not_found)
+                .into(imageView);
+        }
+    }
+
+    @Override
+    public int getItemCount() {
+        return mProducts.size();
+    }
+
+    public static class ViewHolder extends RecyclerView.ViewHolder {
+        private View mProductView;
+
+        public ViewHolder(View itemView) {
+            super(itemView);
+            mProductView = itemView;
         }
 
-        return convertView;
+        public TextView getTitleTextView() {
+            return (TextView)mProductView.findViewById(R.id.textTitle);
+        }
+
+        public TextView getDescriptionTextView() {
+            return (TextView)mProductView.findViewById(R.id.textDescription);
+        }
+
+        public ImageView getImageView() {
+            return (ImageView)mProductView.findViewById(R.id.imageView);
+        }
     }
 }

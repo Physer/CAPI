@@ -4,6 +4,8 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -28,7 +30,7 @@ public class MainActivity extends AppCompatActivity {
     private LoadListCommand<Product> mTask;
 
     private ProgressBar mProgressBar;
-    private ListView mListView;
+    private RecyclerView mRecyclerView;
     private TextView mTextViewError;
 
     @Override
@@ -48,7 +50,9 @@ public class MainActivity extends AppCompatActivity {
         });
 
         mProgressBar = (ProgressBar)findViewById(R.id.progressbar_loading);
-        mListView = (ListView)findViewById(R.id.listview_main);
+        mRecyclerView = (RecyclerView)findViewById(R.id.recyclerview_main);
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+
         mTextViewError = (TextView)findViewById(R.id.textview_error);
     }
 
@@ -98,9 +102,9 @@ public class MainActivity extends AppCompatActivity {
     public void onLoadComplete(List<Product> result) {
         mTask = null;
         mProgressBar.setVisibility(View.GONE);
-        ProductAdapter adapter = new ProductAdapter(this, result);
-        mListView.setAdapter(adapter);
-        mListView.setVisibility(View.VISIBLE);
+        ProductAdapter adapter = new ProductAdapter(result, this);
+        mRecyclerView.setAdapter(adapter);
+        mRecyclerView.setVisibility(View.VISIBLE);
     }
 
     private void onLoadError() {

@@ -9,7 +9,6 @@ import java.util.List;
  * A loader of models of type TModel, and with a key TKey
  */
 
-public interface ModelLoader<TModel extends BaseModel, TKey> {
-    TModel load(TKey key);
+public interface ModelLoader<TModel extends BaseModel> {
     List<TModel> getList() throws IOException;
 }

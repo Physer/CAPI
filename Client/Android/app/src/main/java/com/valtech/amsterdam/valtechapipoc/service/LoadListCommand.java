@@ -11,9 +11,9 @@ import java.util.List;
  */
 
 public class LoadListCommand<TModel extends BaseModel> implements Command<List<TModel>> {
-    private ModelLoader mModelLoader;
+    private ModelLoader<TModel> mModelLoader;
 
-    public LoadListCommand(ModelLoader modelLoader) {
+    public LoadListCommand(ModelLoader<TModel> modelLoader) {
         mModelLoader = modelLoader;
     }
 
@@ -22,4 +22,3 @@ public class LoadListCommand<TModel extends BaseModel> implements Command<List<T
         return mModelLoader.getList();
     }
 }
-
