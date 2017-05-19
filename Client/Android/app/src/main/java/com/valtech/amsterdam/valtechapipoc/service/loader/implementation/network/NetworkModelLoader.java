@@ -44,6 +44,12 @@ public class NetworkModelLoader<TModel extends BaseModel> implements ModelLoader
 
         HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
 
+        try {
+            Thread.sleep(3000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        
         String content = mUrlContentReader.readContent(urlConnection);
         return mDesynchronizer.getList(content);
     }

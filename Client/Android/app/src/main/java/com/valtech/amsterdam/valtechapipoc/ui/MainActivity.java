@@ -5,6 +5,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -22,6 +23,7 @@ import com.valtech.amsterdam.valtechapipoc.service.loader.implementation.network
 import com.valtech.amsterdam.valtechapipoc.service.loader.implementation.network.GsonDesynchronizer;
 import com.valtech.amsterdam.valtechapipoc.service.loader.implementation.network.NetworkModelLoader;
 
+import java.io.Serializable;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
@@ -31,9 +33,15 @@ public class MainActivity extends AppCompatActivity {
     private ListView mListView;
     private TextView mTextViewError;
 
+    private boolean mHasLoadedApi;
+
+    private static final String mProductsKey = "PRODUCT_KEY";
+    private static final String mLogKey = "MAIN_ACTIVITY";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -50,6 +58,11 @@ public class MainActivity extends AppCompatActivity {
         mProgressBar = (ProgressBar)findViewById(R.id.progressbar_loading);
         mListView = (ListView)findViewById(R.id.listview_main);
         mTextViewError = (TextView)findViewById(R.id.textview_error);
+
+        if(savedInstanceState != null) {
+            List<Product> products = (List<Product>) savedInstanceState.get(mProductsKey);
+            onLoadComplete(products);
+        }
     }
 
     @Override
@@ -61,23 +74,27 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onStart() {
+        Log.d(mLogKey, "Initiating onStart method");
         super.onStart();
 
-        mTask = new LoadListCommand<>(new NetworkModelLoader<>(new BufferedStreamContentReader(), new GsonDesynchronizer<>(Product.class), new StringResourcePreferenceManager(this), Product.class));
+        if(mListView.getAdapter() == null) {
+            Log.d(mLogKey, "No adapter found, calling async task");
+            mTask = new LoadListCommand<>(new NetworkModelLoader<>(new BufferedStreamContentReader(), new GsonDesynchronizer<>(Product.class), new StringResourcePreferenceManager(this), Product.class));
 
-        AsyncCommandExecutor<List<Product>> productsExecutor = new AsyncCommandExecutor<>(new TaskListener<List<Product>>() {
-            @Override
-            public void onComplete(List<Product> products) {
-                onLoadComplete(products);
-            }
+            AsyncCommandExecutor<List<Product>> productsExecutor = new AsyncCommandExecutor<>(new TaskListener<List<Product>>() {
+                @Override
+                public void onComplete(List<Product> products) {
+                    onLoadComplete(products);
+                }
 
-            @Override
-            public void onError(Exception exception) {
-                onLoadError();
-            }
-        });
+                @Override
+                public void onError(Exception exception) {
+                    onLoadError();
+                }
+            });
 
-        productsExecutor.execute(mTask);
+            productsExecutor.execute(mTask);
+        }
     }
 
     @Override
@@ -93,6 +110,19 @@ public class MainActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        Log.d(mLogKey, "Initiating onSave State");
+        super.onSaveInstanceState(outState);
+
+        ProductAdapter productAdapter = (ProductAdapter)mListView.getAdapter();
+        if(productAdapter != null) {
+            Log.d(mLogKey, "Found product adapter, saving products to bundle");
+            List<Product> products = productAdapter.getProducts();
+            outState.putSerializable(mProductsKey, (Serializable)products);
+        }
     }
 
     public void onLoadComplete(List<Product> result) {

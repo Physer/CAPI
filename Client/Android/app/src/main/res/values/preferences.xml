@@ -1,4 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="api_base_location">http://dev-capi.azurewebsites.net/api/</string>
+    <string name="api_base_location">http://10.100.132.68/api/</string>
 </resources>

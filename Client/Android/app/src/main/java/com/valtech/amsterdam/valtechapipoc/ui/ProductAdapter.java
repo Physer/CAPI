@@ -15,18 +15,25 @@ import com.squareup.picasso.Picasso;
 import com.valtech.amsterdam.valtechapipoc.R;
 import com.valtech.amsterdam.valtechapipoc.model.Product;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
  * Created by jasper.van.zijp on 7-4-2017.
  */
 
-public class ProductAdapter extends ArrayAdapter<Product> {
+public class ProductAdapter extends ArrayAdapter<Product> implements Serializable {
+    private List<Product> mProducts;
     private Context mContext;
 
     public ProductAdapter(@NonNull Context context, @NonNull List<Product> objects) {
         super(context, 0, objects);
+        mProducts = objects;
         mContext = context;
+    }
+
+    public List<Product> getProducts(){
+        return mProducts;
     }
 
     @Override

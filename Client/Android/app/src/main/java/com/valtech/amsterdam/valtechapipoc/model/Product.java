@@ -3,6 +3,7 @@ package com.valtech.amsterdam.valtechapipoc.model;
 import com.google.gson.annotations.SerializedName;
 import com.valtech.amsterdam.valtechapipoc.model.annotation.ApiInfo;
 
+import java.io.Serializable;
 import java.util.UUID;
 
 /**
@@ -10,7 +11,7 @@ import java.util.UUID;
  */
 
 @ApiInfo(methodName = "content")
-public class Product extends BaseModel<UUID> {
+public class Product extends BaseModel<UUID> implements Serializable {
     @SerializedName("Title") private String mTitle;
     @SerializedName("Description") private String mDescription;
     @SerializedName("ImageUrl") private String mImageUrl;
