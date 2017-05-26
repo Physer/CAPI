@@ -23,8 +23,7 @@ public class GsonDesynchronizer<TModel extends BaseModel> implements Desynchroni
         Object [] array = (Object[])java.lang.reflect.Array.newInstance(mModelClass, 1);
         array = new Gson().fromJson(json, array.getClass());
         List<TModel> list = new ArrayList<>();
-        for (int i=0 ; i<array.length ; i++)
-            list.add((TModel)array[i]);
+        for (Object anArray : array) list.add((TModel) anArray);
         return list;
     }
 }
