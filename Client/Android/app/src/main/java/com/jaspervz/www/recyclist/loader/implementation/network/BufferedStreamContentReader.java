@@ -1,15 +1,20 @@
-package com.valtech.amsterdam.valtechapipoc.service.loader.implementation.network;
+package com.jaspervz.www.recyclist.loader.implementation.network;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 
+import javax.inject.Inject;
+
 /**
  * Reads String content from a HttpURLConnection by Buffering reading
  */
 
 public class BufferedStreamContentReader implements UrlContentReader {
+    @Inject
+    public BufferedStreamContentReader() {}
+
     @Override
     public String readContent(HttpURLConnection urlConnection) throws IOException {
         BufferedReader bufferedReader;

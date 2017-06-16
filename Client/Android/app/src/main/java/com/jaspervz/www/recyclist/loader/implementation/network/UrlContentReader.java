@@ -1,4 +1,4 @@
-package com.valtech.amsterdam.valtechapipoc.service.loader.implementation.network;
+package com.jaspervz.www.recyclist.loader.implementation.network;
 
 import java.io.IOException;
 import java.net.HttpURLConnection;

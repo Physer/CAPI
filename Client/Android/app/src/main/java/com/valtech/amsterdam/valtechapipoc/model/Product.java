@@ -1,7 +1,7 @@
 package com.valtech.amsterdam.valtechapipoc.model;
 
 import com.google.gson.annotations.SerializedName;
-import com.valtech.amsterdam.valtechapipoc.model.annotation.ApiInfo;
+import com.jaspervz.www.recyclist.annotation.ApiInfo;
 
 import java.util.UUID;
 

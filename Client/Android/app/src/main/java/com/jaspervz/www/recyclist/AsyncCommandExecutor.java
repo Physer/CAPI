@@ -1,4 +1,4 @@
-package com.valtech.amsterdam.valtechapipoc.service;
+package com.jaspervz.www.recyclist;
 
 import android.os.AsyncTask;
 import android.util.Log;
