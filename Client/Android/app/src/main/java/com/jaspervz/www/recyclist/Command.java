@@ -1,4 +1,4 @@
-package com.valtech.amsterdam.valtechapipoc.service;
+package com.jaspervz.www.recyclist;
 
 import java.io.IOException;
 

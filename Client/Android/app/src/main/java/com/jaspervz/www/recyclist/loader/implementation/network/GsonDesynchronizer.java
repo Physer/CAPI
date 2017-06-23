@@ -1,8 +1,6 @@
-package com.valtech.amsterdam.valtechapipoc.service.loader.implementation.network;
-
+package com.jaspervz.www.recyclist.loader.implementation.network;
 
 import com.google.gson.Gson;
-import com.valtech.amsterdam.valtechapipoc.model.BaseModel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,7 +9,7 @@ import java.util.List;
  * Created by jaspe on 11-4-2017.
  */
 
-public class GsonDesynchronizer<TModel extends BaseModel> implements Desynchronizer {
+public class GsonDesynchronizer<TModel> implements Desynchronizer {
     private Class<TModel> mModelClass;
 
     public GsonDesynchronizer(Class<TModel> modelClass) {

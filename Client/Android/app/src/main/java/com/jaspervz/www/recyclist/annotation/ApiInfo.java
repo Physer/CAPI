@@ -1,4 +1,4 @@
-package com.valtech.amsterdam.valtechapipoc.model.annotation;
+package com.jaspervz.www.recyclist.annotation;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;

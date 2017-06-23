@@ -1,7 +1,6 @@
-package com.valtech.amsterdam.valtechapipoc.service;
+package com.jaspervz.www.recyclist;
 
-import com.valtech.amsterdam.valtechapipoc.model.BaseModel;
-import com.valtech.amsterdam.valtechapipoc.service.loader.ModelLoader;
+import com.jaspervz.www.recyclist.loader.ModelLoader;
 
 import java.io.IOException;
 import java.util.List;
@@ -10,7 +9,7 @@ import java.util.List;
  * A Commands that loads a List of objects of type TModel
  */
 
-public class LoadListCommand<TModel extends BaseModel> implements Command<List<TModel>> {
+public class LoadListCommand<TModel> implements Command<List<TModel>> {
     private ModelLoader<TModel> mModelLoader;
 
     public LoadListCommand(ModelLoader<TModel> modelLoader) {

@@ -10,33 +10,38 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.valtech.amsterdam.valtechapipoc.R;
 import com.valtech.amsterdam.valtechapipoc.model.Product;
-import com.valtech.amsterdam.valtechapipoc.platform.StringResourcePreferenceManager;
-import com.valtech.amsterdam.valtechapipoc.service.AsyncCommandExecutor;
-import com.valtech.amsterdam.valtechapipoc.service.LoadListCommand;
-import com.valtech.amsterdam.valtechapipoc.service.TaskListener;
-import com.valtech.amsterdam.valtechapipoc.service.loader.implementation.network.BufferedStreamContentReader;
-import com.valtech.amsterdam.valtechapipoc.service.loader.implementation.network.GsonDesynchronizer;
-import com.valtech.amsterdam.valtechapipoc.service.loader.implementation.network.NetworkModelLoader;
+import com.jaspervz.www.recyclist.Recyclist;
+import com.jaspervz.www.recyclist.Recyclistener;
+import com.valtech.amsterdam.valtechapipoc.platform.injection.DaggerInjectionComponent;
+import com.valtech.amsterdam.valtechapipoc.platform.injection.InjectionComponent;
 
-import java.util.List;
+import javax.inject.Inject;
 
-public class MainActivity extends AppCompatActivity {
-    private LoadListCommand<Product> mTask;
-
+public class MainActivity extends AppCompatActivity implements Recyclistener {
     private ProgressBar mProgressBar;
     private RecyclerView mRecyclerView;
     private TextView mTextViewError;
+
+    @Inject
+    Recyclist<Product> recyclist;
+
+    private InjectionComponent component;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        component = DaggerInjectionComponent
+                .builder()
+                .build();
+        component.inject(this); //This makes the members injected
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -66,22 +71,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-
-        mTask = new LoadListCommand<>(new NetworkModelLoader<>(new BufferedStreamContentReader(), new GsonDesynchronizer<>(Product.class), new StringResourcePreferenceManager(this), Product.class));
-
-        AsyncCommandExecutor<List<Product>> productsExecutor = new AsyncCommandExecutor<>(new TaskListener<List<Product>>() {
-            @Override
-            public void onComplete(List<Product> products) {
-                onLoadComplete(products);
-            }
-
-            @Override
-            public void onError(Exception exception) {
-                onLoadError();
-            }
-        });
-
-        productsExecutor.execute(mTask);
+        recyclist.startBind(this, getString(R.string.api_base_location), Product.class, new ProductViewBinder(this), R.layout.product, mRecyclerView);
     }
 
     @Override
@@ -99,17 +89,35 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public void onLoadComplete(List<Product> result) {
-        mTask = null;
+    @Override
+    public void showProgress() {
+        mProgressBar.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void hideProgress() {
         mProgressBar.setVisibility(View.GONE);
-        ProductAdapter adapter = new ProductAdapter(result, this);
-        mRecyclerView.setAdapter(adapter);
+    }
+
+    @Override
+    public void showResults() {
         mRecyclerView.setVisibility(View.VISIBLE);
     }
 
-    private void onLoadError() {
-        mTask = null;
-        mProgressBar.setVisibility(View.GONE);
+    @Override
+    public void hideResults() {
+        mRecyclerView.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void showError(String message) {
+        mTextViewError.setText(message);
         mTextViewError.setVisibility(View.VISIBLE);
     }
+
+    @Override
+    public void hideError() {
+        mTextViewError.setVisibility(View.GONE);
+    }
 }
+
